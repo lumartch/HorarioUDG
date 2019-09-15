@@ -17,6 +17,7 @@
             var career = "";
             // Variables para Template Schedule
             var day = "";
+            // Función para iniciar sesión
             function login(){
                 codigo = document.getElementById("code").value;
                 nip = document.getElementById("pass").value;
@@ -39,7 +40,7 @@
                 xhttp.open("GET", "http://dcc.000webhostapp.com/2018/datosudeg.php?codigo="+ codigo + "&nip=" + nip, true);
                 xhttp.send();
             }
-
+            // Función para colocar los horarios en la interfaz
             function userSchedule(day){
                 document.querySelector('#myNavigator').pushPage('schedule.html', {data: {title: 'Alumno UDG'}});
                 var xhttp = new XMLHttpRequest();
@@ -134,7 +135,7 @@
                 </p>
             </ons-card>
             <ons-card>
-                
+
             </ons-card>
             </ons-page>
         </template>
