@@ -8,12 +8,18 @@
         <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
         <title>Universidad de Guadalajara</title>
         <script>
+            // Variables para Template LOGIN
+            var codigo = "";
+            var nip = "";
+            // Variables para Template USER
             var code = "";
             var name = "";
-            var career = ""
+            var career = "";
+            // Variables para Template Schedule
+            var day = "";
             function login(){
-                var codigo = document.getElementById("code").value;
-                var nip = document.getElementById("pass").value;
+                codigo = document.getElementById("code").value;
+                nip = document.getElementById("pass").value;
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function(){
                 if(xhttp.readyState == 4 && this.status == 200){
@@ -34,11 +40,22 @@
                 xhttp.send();
             }
 
+            function userSchedule(day){
+                document.querySelector('#myNavigator').pushPage('schedule.html', {data: {title: 'Alumno UDG'}});
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function(){
+                  if(this.readyState == 4 && this.status == 200){
+                    var json = JSON.parse(this.responseText);
+                    console.log(json);
+                  }
+                };
+                xhttp.open("GET", "http://dcc.000webhostapp.com/2019B/horario.php?codigo="+ codigo + "&nip=" + nip, true);
+                xhttp.send();
+            }
         </script>
     </head>
     <body>
         <ons-navigator swipeable id="myNavigator" page="index.html" animation="slide"></ons-navigator>
-
         <!--Código de la página index, solo toma los valores para el Login-->
         <template id="index.html">
             <ons-page id="index">
@@ -46,14 +63,19 @@
             <div class="center">Universidad de Guadalajara</div>
             </ons-toolbar>
             <ons-card>
-                <h1>Horario UDG</h1>
-                <img src="https://www.mexicoescultura.com/galerias/espacios/principal/udg.jpg" height="200" width="200">
-                <br><br>
-                <ons-input input-id="code" placeholder="Código" type="text" modifier="underbar"></ons-input>
-                <br><br>
-                <ons-input input-id="pass" placeholder="NIP" type="password" modifier="underbar"></ons-input>
-                <br><br>
-                <ons-button id="push-button" onclick="login()">Entrar</ons-button>
+                <center>
+                    <h1>Horario UDG</h1>
+                    <img src="https://www.mexicoescultura.com/galerias/espacios/principal/udg.jpg" height="200" width="200">
+                </center>
+            </ons-card>
+            <ons-card>
+                <center>
+                    <ons-input input-id="code" placeholder="Código" type="text" modifier="underbar"></ons-input>
+                    <br><br>
+                    <ons-input input-id="pass" placeholder="NIP" type="password" modifier="underbar"></ons-input>
+                    <br><br>
+                    <ons-button id="push-button" onclick="login()">Entrar</ons-button>
+                </center>
             </ons-card>
             </ons-page>
         </template>
@@ -77,13 +99,42 @@
                         document.getElementById("lcarrera").innerHTML = "Carrera: " + career;
                     </script>
                 </p>
+            </ons-card>
+
+            <ons-card>
                 <ons-list-header>Días de la semana</ons-list-header>
-                <ons-list-item tappable>Lunes</ons-list-item>
-                <ons-list-item tappable>Martes</ons-list-item>
-                <ons-list-item tappable>Miércoles</ons-list-item>
-                <ons-list-item tappable>Jueves</ons-list-item>
-                <ons-list-item tappable>Viernes</ons-list-item>
-                <ons-list-item tappable>Sábado</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('L')">Lunes</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('M')">Martes</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('I')">Miércoles</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('J')">Jueves</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('V')">Viernes</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('S')">Sábado</ons-list-item>
+            </ons-card>
+            </ons-page>
+        </template>
+
+        <!--Código para imprimir el horario correspondiente al día-->
+        <template id="schedule.html">
+            <ons-page id="schedule">
+            <ons-toolbar>
+            <div class="left"><ons-back-button>Regresar</ons-back-button></div>
+            <div class="center">Horario</div>
+            </ons-toolbar>
+            <ons-card>
+                <p class="intro">
+                <ons-list-header>Datos del alumno universitario</ons-list-header>
+                    <ons-list-item><label id="lcod"></label></ons-list-item>
+                    <ons-list-item><label id="lnom"></label></ons-list-item>
+                    <ons-list-item><label id="lcar"></label></ons-list-item>  
+                    <script>
+                        document.getElementById("lcod").innerHTML = "Código: " + code;
+                        document.getElementById("lnom").innerHTML = "Nombre: " + name;   
+                        document.getElementById("lcar").innerHTML = "Carrera: " + career;
+                    </script>
+                </p>
+            </ons-card>
+            <ons-card>
+                
             </ons-card>
             </ons-page>
         </template>
