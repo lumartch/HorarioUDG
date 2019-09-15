@@ -8,11 +8,12 @@
         <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
         <title>Universidad de Guadalajara</title>
         <script>
-            var codigo = "";
-            var nip = "";
+            var code = "";
+            var name = "";
+            var career = ""
             function login(){
-                codigo = document.getElementById("code").value;
-                nip = document.getElementById("pass").value;
+                var codigo = document.getElementById("code").value;
+                var nip = document.getElementById("pass").value;
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function(){
                 if(xhttp.readyState == 4 && this.status == 200){
@@ -20,6 +21,9 @@
                     var array = cadena.split(',');
                     if(array[0] == 'A'){  
                         document.querySelector('#myNavigator').pushPage('user.html', {data: {title: 'Alumno UDG'}});
+                        code = array[1];
+                        name = array[2];
+                        career = array[4];
                     }
                     else {
                         ons.notification.alert("Usuario o contraseña erronea. Intente de nuevo.");
@@ -29,6 +33,7 @@
                 xhttp.open("GET", "http://dcc.000webhostapp.com/2018/datosudeg.php?codigo="+ codigo + "&nip=" + nip, true);
                 xhttp.send();
             }
+
         </script>
     </head>
     <body>
@@ -58,6 +63,7 @@
             <ons-page id="user">
             <ons-toolbar>
             <div class="left"><ons-back-button>Salir</ons-back-button></div>
+            <div class="center">Alumno UDG</div>
             </ons-toolbar>
             <ons-card>
                 <p class="intro">
@@ -65,14 +71,19 @@
                     <ons-list-item><label id="lcodigo"></label></ons-list-item>
                     <ons-list-item><label id="lnombre"></label></ons-list-item>
                     <ons-list-item><label id="lcarrera"></label></ons-list-item>  
+                    <script>
+                        document.getElementById("lcodigo").innerHTML = "Código: " + code;
+                        document.getElementById("lnombre").innerHTML = "Nombre: " + name;   
+                        document.getElementById("lcarrera").innerHTML = "Carrera: " + career;
+                    </script>
                 </p>
                 <ons-list-header>Días de la semana</ons-list-header>
-                <ons-list-item tappable id="item0">Lunes</ons-list-item>
-                <ons-list-item tappable id="item1">Martes</ons-list-item>
-                <ons-list-item tappable id="item2">Miércoles</ons-list-item>
-                <ons-list-item tappable id="item3">Jueves</ons-list-item>
-                <ons-list-item tappable id="item4">Viernes</ons-list-item>
-                <ons-list-item tappable id="item5">Sábado</ons-list-item>
+                <ons-list-item tappable>Lunes</ons-list-item>
+                <ons-list-item tappable>Martes</ons-list-item>
+                <ons-list-item tappable>Miércoles</ons-list-item>
+                <ons-list-item tappable>Jueves</ons-list-item>
+                <ons-list-item tappable>Viernes</ons-list-item>
+                <ons-list-item tappable>Sábado</ons-list-item>
             </ons-card>
             </ons-page>
         </template>
