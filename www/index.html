@@ -3,9 +3,33 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+        <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+        <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
         <title>Universidad de Guadalajara</title>
     </head>
     <body>
+        <ons-navigator swipeable id="myNavigator" page="index.html" animation="slide"></ons-navigator>
+
+            <!--Código de la página index, solo toma los valores para el Login-->
+            <template id="index.html">
+              <ons-page id="index">
+                <ons-toolbar>
+                <div class="center">Universidad de Guadalajara</div>
+                </ons-toolbar>
+                <ons-card>
+                  <h1>Horario UDG</h1>
+                  <img src="https://www.mexicoescultura.com/galerias/espacios/principal/udg.jpg" height="200" width="200">
+                  <br><br>
+                  <ons-input input-id="code" placeholder="Código" type="text" modifier="underbar"></ons-input>
+                  <br><br>
+                  <ons-input input-id="pass" placeholder="NIP" type="password" modifier="underbar"></ons-input>
+                  <br><br>
+                  <ons-button id="push-button">Entrar</ons-button>
+                </ons-card>
+              </ons-page>
+            </template>
+            
         <script type="text/javascript" src="cordova.js"></script>
     </body>
 </html>
