@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
         <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
         <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+        <link rel="shortcut icon" type="image/x-icon" href="https://www.mexicoescultura.com/galerias/espacios/principal/udg.jpg" />
         <title>Universidad de Guadalajara</title>
         <script>
             // Variables para Template LOGIN
@@ -41,13 +42,35 @@
                 xhttp.send();
             }
             // Función para colocar los horarios en la interfaz
-            function userSchedule(day){
-                document.querySelector('#myNavigator').pushPage('schedule.html', {data: {title: 'Alumno UDG'}});
+            function userSchedule(dayLetter, dayWord){
+                day = dayWord;
+                document.querySelector('#myNavigator').pushPage('schedule.html', {data: {title: 'Horario'}});
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function(){
                   if(this.readyState == 4 && this.status == 200){
                     var json = JSON.parse(this.responseText);
-                    console.log(json);
+                    var horario = json.horario;
+                    var i = 0;
+                    var strResult = "";
+                    var flag = false;
+                    for(i in horario){
+                        var strDay = horario[i].dias;
+                        if(strDay.includes(dayLetter)){
+                            flag = true;
+                            strResult += "<ons-list-item>";
+                            strResult += horario[i].nombre_materia;
+                            strResult += "<br>" + horario[i].edificio + " - " + horario[i].aula;
+                            strResult += "<br>" + horario[i].horario;
+                            strResult += "<br>" + horario[i].profesor;
+                            strResult += "</ons-list-item>";
+                        }
+                    }
+                    
+                    if(flag == false){
+                        strResult = "<ons-list-item> Usted no tiene clases el día " + dayWord +", puede descansar.</ons-list-item>";
+                    }
+                    
+                    document.getElementById("materiasList").innerHTML = strResult;
                   }
                 };
                 xhttp.open("GET", "http://dcc.000webhostapp.com/2019B/horario.php?codigo="+ codigo + "&nip=" + nip, true);
@@ -104,12 +127,12 @@
 
             <ons-card>
                 <ons-list-header>Días de la semana</ons-list-header>
-                <ons-list-item tappable onclick="userSchedule('L')">Lunes</ons-list-item>
-                <ons-list-item tappable onclick="userSchedule('M')">Martes</ons-list-item>
-                <ons-list-item tappable onclick="userSchedule('I')">Miércoles</ons-list-item>
-                <ons-list-item tappable onclick="userSchedule('J')">Jueves</ons-list-item>
-                <ons-list-item tappable onclick="userSchedule('V')">Viernes</ons-list-item>
-                <ons-list-item tappable onclick="userSchedule('S')">Sábado</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('L', 'Lunes')">Lunes</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('M', 'Martes')">Martes</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('I', 'Miércoles')">Miércoles</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('J', 'Jueves')">Jueves</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('V', 'Viernes')">Viernes</ons-list-item>
+                <ons-list-item tappable onclick="userSchedule('S', 'Sábado')">Sábado</ons-list-item>
             </ons-card>
             </ons-page>
         </template>
@@ -119,7 +142,7 @@
             <ons-page id="schedule">
             <ons-toolbar>
             <div class="left"><ons-back-button>Regresar</ons-back-button></div>
-            <div class="center">Horario</div>
+            <div class="center" id="divHorario">Horario</div>
             </ons-toolbar>
             <ons-card>
                 <p class="intro">
@@ -131,11 +154,14 @@
                         document.getElementById("lcod").innerHTML = "Código: " + code;
                         document.getElementById("lnom").innerHTML = "Nombre: " + name;   
                         document.getElementById("lcar").innerHTML = "Carrera: " + career;
+                        document.getElementById("divHorario").innerHTML = "Horario del día " + day;
                     </script>
+                    
                 </p>
             </ons-card>
             <ons-card>
-
+                <ons-list-header>Materias</ons-list-header>
+                    <label id="materiasList"></label>
             </ons-card>
             </ons-page>
         </template>
